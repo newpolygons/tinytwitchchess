@@ -1,6 +1,6 @@
-# twitchchess
+# tinytwitchchess
 
-A toy implementation of ~~neural network~~ normal chess written while livestreaming.
+tinygrad implementation or teenygrad if it makes more sense.
 
 <img width=600px src="https://raw.githubusercontent.com/geohot/twitchchess/master/screenshot.png" />
 
@@ -13,10 +13,7 @@ Nice TODO
 * Add Quiescence search to play decent endgame 
 * Is there a bug which allows draws to happen?
 
-Stream
------
 
-https://www.twitch.tv/tomcr00s3
 
 Usage
 -----
