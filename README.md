@@ -19,7 +19,7 @@ Usage
 -----
 
 ```
- pip3 install python-chess torch torchvision numpy flask
+ pip3 install -r requirements.txt
  # then...
  ./play.py   # runs webserver on localhost:5000
 ```
