@@ -1,6 +1,6 @@
 # tinytwitchchess
 
-tinygrad implementation or teenygrad if it makes more sense.
+tinygrad implementation.
 
 <img width=600px src="https://raw.githubusercontent.com/geohot/twitchchess/master/screenshot.png" />
 
@@ -24,12 +24,6 @@ Usage
  ./play.py   # runs webserver on localhost:5000
 ```
 
-Or with pypy (for max speed)
-```
- pip_pypy install python-chess flask
- pypy ./play.py
- # web browse to localhost:5000
-```
 
 TODOs
 -----
