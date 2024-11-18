@@ -46,5 +46,5 @@ We serialize the board into a 8x8x5 bitvector. See state.py for how.
 Training Set
 -----
 
-The value function was trained on 5M board positions from http://www.kingbase-chess.net/
+Old link dead https://lumbrasgigabase.com/en/download-in-pgn-format-en/
 
