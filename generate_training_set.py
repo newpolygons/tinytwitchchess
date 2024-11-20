@@ -9,7 +9,7 @@ def get_dataset(num_samples=None):
   values = {'1/2-1/2':0, '0-1':-1, '1-0':1}
   # pgn files in the data folder
   for fn in os.listdir("data"):
-    pgn = open(os.path.join("data", fn))
+    pgn = open(os.path.join("data", fn), errors='ignore')
     while 1:
       game = chess.pgn.read_game(pgn)
       if game is None:

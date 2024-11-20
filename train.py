@@ -1,11 +1,20 @@
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import Dataset
-from torch import optim
 
-class ChessValueDataset(Dataset):
+#import torch
+#import torch.nn as nn
+#import torch.nn.functional as F
+#from torch.utils.data import Dataset
+#from torch import optim
+
+import numpy as np
+import tinygrad.tinygrad.nn as nn
+import tinygrad.tinygrad.function as F
+from tinygrad.tinygrad.nn import optim
+from tinygrad.tinygrad import Tensor as t
+# cant be bothered
+from tinyloader.dataloader import DataLoader
+
+
+class ChessValueDataset(DataLoader):
   def __init__(self):
     dat = np.load("processed/dataset_5M.npz")
     self.X = dat['arr_0']
@@ -18,7 +27,7 @@ class ChessValueDataset(Dataset):
   def __getitem__(self, idx):
     return (self.X[idx], self.Y[idx])
 
-class Net(nn.Module):
+class Net(nn.state.get_parameters):
   def __init__(self):
     super(Net, self).__init__()
     self.a1 = nn.Conv2d(5, 16, kernel_size=3, padding=1)
@@ -39,43 +48,42 @@ class Net(nn.Module):
 
     self.last = nn.Linear(128, 1)
 
-  def forward(self, x):
-    x = F.relu(self.a1(x))
-    x = F.relu(self.a2(x))
-    x = F.relu(self.a3(x))
+  def __call__(self, x):
+    x = F.Relu(self.a1(x))
+    x = F.Relu(self.a2(x))
+    x = F.Relu(self.a3(x))
 
     # 4x4
-    x = F.relu(self.b1(x))
-    x = F.relu(self.b2(x))
-    x = F.relu(self.b3(x))
+    x = F.Relu(self.b1(x))
+    x = F.Relu(self.b2(x))
+    x = F.Relu(self.b3(x))
 
     # 2x2
-    x = F.relu(self.c1(x))
-    x = F.relu(self.c2(x))
-    x = F.relu(self.c3(x))
+    x = F.Relu(self.c1(x))
+    x = F.Relu(self.c2(x))
+    x = F.Relu(self.c3(x))
 
     # 1x128
-    x = F.relu(self.d1(x))
-    x = F.relu(self.d2(x))
-    x = F.relu(self.d3(x))
+    x = F.Relu(self.d1(x))
+    x = F.Relu(self.d2(x))
+    x = F.Relu(self.d3(x))
 
     x = x.view(-1, 128)
     x = self.last(x)
 
     # value output
-    return F.tanh(x)
+    return t.tanh(x)
 
 if __name__ == "__main__":
-  device = "cuda"
+  device = "METAL"
 
   chess_dataset = ChessValueDataset()
-  train_loader = torch.utils.data.DataLoader(chess_dataset, batch_size=256, shuffle=True)
+  train_loader = DataLoader(chess_dataset, batch_size=256)
   model = Net()
   optimizer = optim.Adam(model.parameters())
-  floss = nn.MSELoss()
 
-  if device == "cuda":
-    model.cuda()
+  if device == "METAL":
+    model.mps()
 
   model.train()
 
@@ -93,7 +101,7 @@ if __name__ == "__main__":
       output = model(data)
       #print(output.shape)
 
-      loss = floss(output, target)
+      loss = ((output - target)**2).mean()
       loss.backward()
       optimizer.step()
       
@@ -101,5 +109,5 @@ if __name__ == "__main__":
       num_loss += 1
 
     print("%3d: %f" % (epoch, all_loss/num_loss))
-    torch.save(model.state_dict(), "nets/value.pth")
+    nn.state.safe_save(model.state_dict(), "nets/value.safetensor")
 
